@@ -1,13 +1,17 @@
 import React from 'react';
-import { Phone, MessageCircle, ArrowDown, Sparkles, MapPin, Building2, CheckCircle2 } from 'lucide-react';
+import { Phone, MessageCircle, ArrowDown, MapPin, Building2, CheckCircle2, Shield, Sparkles } from 'lucide-react';
+import { motion } from 'motion/react';
 import heroVillaImg from '../assets/images/hero_property_villa_1789448557171.jpg';
 import { BUSINESS_INFO } from '../data/properties';
+import { useTheme } from '../context/ThemeContext';
 
 interface HeroProps {
   onSelectFeaturedProperty?: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({ onSelectFeaturedProperty }) => {
+  const { isDark } = useTheme();
+
   const scrollToProperties = () => {
     const el = document.getElementById('properties');
     if (el) {
@@ -15,117 +19,216 @@ export const Hero: React.FC<HeroProps> = ({ onSelectFeaturedProperty }) => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 25 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
   return (
     <section
       id="home"
-      className="relative overflow-hidden bg-[#F8F4EF] pt-6 pb-16 md:pt-10 md:pb-24 lg:pt-14 lg:pb-28"
+      className={`relative overflow-hidden pt-8 pb-16 md:pt-14 md:pb-24 lg:pt-18 lg:pb-28 transition-colors ${
+        isDark
+          ? 'bg-[#060B14] text-white bg-luxury-grid-dark'
+          : 'bg-[#FAF7F2] text-[#0B2239] bg-luxury-grid-light'
+      }`}
     >
-      {/* Subtle architectural background accents inspired by the reference */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#EFE8DF] rounded-full blur-3xl -z-10 opacity-70 pointer-events-none" />
-      <div className="absolute -bottom-10 left-10 w-72 h-72 bg-[#D96F58]/10 rounded-full blur-3xl -z-10 pointer-events-none" />
-      <div className="hidden lg:block absolute top-20 right-1/3 w-px h-64 bg-[#EFE8DF] -z-10 pointer-events-none" />
+      {/* Ambient Glowing Floating Orbs with Motion */}
+      <motion.div
+        animate={{
+          scale: [1, 1.15, 1],
+          opacity: isDark ? [0.2, 0.35, 0.2] : [0.12, 0.22, 0.12],
+          x: [0, 20, 0],
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-10 right-10 w-96 h-96 bg-gradient-to-br from-[#D96F58] to-amber-500 rounded-full blur-3xl -z-10 pointer-events-none"
+      />
+      <motion.div
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: isDark ? [0.15, 0.28, 0.15] : [0.1, 0.18, 0.1],
+          y: [0, -25, 0],
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -bottom-20 left-10 w-80 h-80 bg-[#0B2239] rounded-full blur-3xl -z-10 pointer-events-none"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-          {/* Left Column: Editorial Typography & Conversion CTAs */}
-          <div className="lg:col-span-7 flex flex-col items-start">
-            {/* Small Eyebrow Badge */}
-            <div
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+          {/* Left Column: Editorial Typography & Animated Entrances */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-7 flex flex-col items-start"
+          >
+            {/* Eyebrow Badge */}
+            <motion.div
+              variants={itemVariants}
               id="hero-eyebrow"
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#EFE8DF] shadow-2xs mb-6 text-xs font-bold tracking-widest text-[#0B2239] uppercase"
+              className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border shadow-xs mb-6 text-xs font-bold tracking-widest uppercase backdrop-blur-md ${
+                isDark
+                  ? 'bg-[#0E1726]/80 border-white/10 text-slate-200'
+                  : 'bg-white border-[#EFE8DF] text-[#0B2239]'
+              }`}
             >
-              <span className="w-2 h-2 rounded-full bg-[#D96F58] animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#D96F58] animate-ping" />
               <span>NASIR REAL ESTATE</span>
               <span className="text-[#94A3B8]">|</span>
-              <span className="text-[#68717A] font-normal normal-case flex items-center gap-1">
-                <MapPin className="w-3 h-3 text-[#D96F58]" /> Chenab Nagar & Chiniot
+              <span className="font-normal normal-case flex items-center gap-1 text-[#D96F58]">
+                <MapPin className="w-3.5 h-3.5" /> Chenab Nagar & Chiniot
               </span>
-            </div>
+            </motion.div>
 
-            {/* Large Dramatic Headline */}
-            <h1
+            {/* Dramatic Luxury Headline */}
+            <motion.h1
+              variants={itemVariants}
               id="hero-headline"
-              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[68px] font-black text-[#0B2239] leading-[1.06] tracking-tight uppercase mb-6"
+              className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[70px] font-black leading-[1.05] tracking-tight uppercase mb-6"
             >
               FIND A PLACE <br className="hidden sm:inline" />
               THAT FEELS <br className="hidden sm:inline" />
               LIKE HOME.{' '}
-              <span className="block mt-2 text-[#D96F58]">YOUR NEXT PROPERTY</span>
-            </h1>
+              <span className="block mt-2 text-[#D96F58] drop-shadow-xs">
+                YOUR NEXT PROPERTY
+              </span>
+            </motion.h1>
 
-            {/* Supporting Paragraph */}
-            <p
+            {/* Supporting Value Proposition */}
+            <motion.p
+              variants={itemVariants}
               id="hero-subtext"
-              className="text-base sm:text-lg text-[#68717A] max-w-xl font-normal leading-relaxed mb-8"
+              className={`text-base sm:text-lg max-w-xl font-normal leading-relaxed mb-8 ${
+                isDark ? 'text-slate-300' : 'text-[#5C6670]'
+              }`}
             >
-              Discover residential and commercial property opportunities with Nasir Real Estate. Explore the right location, the right property, and the right opportunity.
-            </p>
+              Discover verified residential and commercial property opportunities with Nasir Real Estate. Explore the right location, the right property, and direct owner pricing in Chenab Nagar & Chiniot.
+            </motion.p>
 
-            {/* CTA Group: Primary, Secondary WhatsApp, and Direct Phone */}
-            <div className="w-full flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-8">
+            {/* CTA Group: Explore, WhatsApp, Phone */}
+            <motion.div
+              variants={itemVariants}
+              className="w-full flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 mb-10"
+            >
               {/* Primary: Explore Properties */}
-              <button
+              <motion.button
                 id="hero-btn-explore"
                 onClick={scrollToProperties}
-                className="inline-flex items-center justify-center gap-2 bg-[#0B2239] hover:bg-[#07182A] text-white px-7 py-3.5 rounded-full font-semibold text-base shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer"
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className={`inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm sm:text-base shadow-lg transition-all cursor-pointer ${
+                  isDark
+                    ? 'bg-white text-[#0B2239] hover:bg-slate-100'
+                    : 'bg-[#0B2239] text-white hover:bg-[#07182A]'
+                }`}
               >
                 <span>Explore Properties</span>
                 <ArrowDown className="w-4 h-4 text-[#D96F58]" />
-              </button>
+              </motion.button>
 
               {/* Secondary: WhatsApp Us */}
-              <a
+              <motion.a
                 id="hero-btn-whatsapp"
                 href={BUSINESS_INFO.whatsappBaseUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 bg-[#D96F58] hover:bg-[#E27A61] text-white px-7 py-3.5 rounded-full font-semibold text-base shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#D96F58] to-[#C85A42] hover:from-[#E27A61] hover:to-[#D96F58] text-white px-7 py-3.5 rounded-full font-bold text-sm sm:text-base shadow-lg transition-all"
               >
-                <MessageCircle className="w-5 h-5" />
+                <MessageCircle className="w-4 h-4" />
                 <span>WhatsApp Us</span>
-              </a>
+              </motion.a>
 
               {/* Direct Clickable Phone Button */}
-              <a
+              <motion.a
                 id="hero-phone-link"
                 href={BUSINESS_INFO.phoneHref}
-                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-white hover:bg-[#EFE8DF] text-[#0B2239] border border-[#EFE8DF] font-semibold text-base shadow-xs transition-colors group"
+                whileHover={{ scale: 1.03, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className={`inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-full border font-bold text-sm sm:text-base shadow-xs transition-colors ${
+                  isDark
+                    ? 'bg-[#0E1726]/80 hover:bg-[#152238] border-white/10 text-white'
+                    : 'bg-white hover:bg-[#F2ECE1] border-[#EFE8DF] text-[#0B2239]'
+                }`}
                 title="Call 03163370864"
               >
-                <Phone className="w-4 h-4 text-[#D96F58] group-hover:scale-110 transition-transform" />
+                <Phone className="w-4 h-4 text-[#D96F58]" />
                 <span className="font-mono">{BUSINESS_INFO.phoneDisplay}</span>
-              </a>
-            </div>
+              </motion.a>
+            </motion.div>
 
-            {/* Quick Trust Highlights */}
-            <div className="pt-6 border-t border-[#EFE8DF] w-full grid grid-cols-3 gap-3 text-xs sm:text-sm text-[#68717A]">
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#D96F58] shrink-0" />
-                <span className="font-medium text-[#202A33]">Chenab Nagar</span>
+            {/* Quick Proof Metrics Strip */}
+            <motion.div
+              variants={itemVariants}
+              className={`pt-6 border-t w-full grid grid-cols-3 gap-4 text-xs sm:text-sm ${
+                isDark ? 'border-white/10 text-slate-300' : 'border-[#EFE8DF] text-[#68717A]'
+              }`}
+            >
+              <div>
+                <span className="block font-mono font-black text-xl sm:text-2xl text-[#D96F58]">
+                  15+
+                </span>
+                <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider opacity-80">
+                  Years Local Insight
+                </span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-[#D96F58] shrink-0" />
-                <span className="font-medium text-[#202A33]">Chiniot Markets</span>
+              <div>
+                <span className="block font-mono font-black text-xl sm:text-2xl text-[#D96F58]">
+                  1,200+
+                </span>
+                <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider opacity-80">
+                  Verified Inquiries
+                </span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <Building2 className="w-4 h-4 text-[#D96F58] shrink-0" />
-                <span className="font-medium text-[#202A33]">Chamber Affiliation</span>
+              <div>
+                <span className="block font-mono font-black text-xl sm:text-2xl text-[#D96F58]">
+                  100%
+                </span>
+                <span className="text-[11px] sm:text-xs font-medium uppercase tracking-wider opacity-80">
+                  Clear Land Titles
+                </span>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          {/* Right Column: Architectural Photography & Floating Property Card */}
-          <div className="lg:col-span-5 relative mt-4 lg:mt-0">
-            {/* Decorative Architectural Offset Card behind image */}
-            <div className="absolute -top-4 -right-4 sm:-top-6 sm:-right-6 w-full h-full rounded-3xl bg-[#0B2239] -z-10 transform rotate-1 sm:rotate-2 opacity-95 transition-transform" />
+          {/* Right Column: Architectural Image & Interactive Floating Card */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 relative mt-6 lg:mt-0"
+          >
+            {/* Architectural Backdrop Frame with Glow */}
+            <div
+              className={`absolute -top-4 -right-4 sm:-top-6 sm:-right-6 w-full h-full rounded-3xl -z-10 transform rotate-1 sm:rotate-2 transition-transform ${
+                isDark ? 'bg-[#0E1726] border border-amber-400/20 shadow-2xl' : 'bg-[#0B2239] opacity-90'
+              }`}
+            />
             
-            {/* Coral Accent Line */}
-            <div className="absolute -bottom-3 -left-3 w-32 h-32 rounded-3xl border-2 border-[#D96F58] -z-10 opacity-60" />
+            <div className="absolute -bottom-3 -left-3 w-32 h-32 rounded-3xl border-2 border-[#D96F58] -z-10 opacity-50" />
 
             {/* Main Luxury Architectural Image */}
             <div
               id="hero-image-wrapper"
-              className="relative rounded-3xl overflow-hidden shadow-2xl bg-[#07182A] border-4 border-white aspect-[4/3] sm:aspect-[4/3]"
+              className={`relative rounded-3xl overflow-hidden shadow-2xl border-4 aspect-[4/3] group ${
+                isDark ? 'border-white/10 bg-[#0A1220]' : 'border-white bg-[#07182A]'
+              }`}
             >
               <img
                 id="hero-property-image"
@@ -133,57 +236,69 @@ export const Hero: React.FC<HeroProps> = ({ onSelectFeaturedProperty }) => {
                 alt="Contemporary luxury villa exterior in Chenab Nagar"
                 referrerPolicy="no-referrer"
                 loading="eager"
-                className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700 ease-out"
+                className="w-full h-full object-cover object-center group-hover:scale-106 transition-transform duration-700 ease-out"
               />
 
               {/* Gradient overlay on image bottom */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#07182A]/70 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+
+              {/* Shimmer light sweep effect on card */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-all duration-1000 ease-in-out" />
 
               {/* Top corner category badge */}
               <div className="absolute top-4 left-4">
-                <span className="px-3 py-1 rounded-full bg-[#0B2239]/80 backdrop-blur-md text-white text-xs font-semibold uppercase tracking-wider border border-white/20">
-                  Featured Property
+                <span className="px-3.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider border border-white/20">
+                  Featured Residence
                 </span>
               </div>
             </div>
 
-            {/* Floating Property Information Card */}
-            <div
+            {/* Floating Property Information Card with Motion */}
+            <motion.div
               id="hero-floating-card"
-              className="absolute -bottom-6 left-4 right-4 sm:left-6 sm:right-auto sm:w-[320px] bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-[#EFE8DF] transform transition-all duration-300 hover:-translate-y-1"
+              whileHover={{ y: -4 }}
+              className={`absolute -bottom-6 left-4 right-4 sm:left-6 sm:right-auto sm:w-[330px] p-5 rounded-2xl shadow-2xl border backdrop-blur-xl transition-all ${
+                isDark
+                  ? 'bg-[#0C1524]/95 border-white/15 text-white'
+                  : 'bg-white/95 border-[#EFE8DF] text-[#0B2239]'
+              }`}
             >
-              <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center justify-between mb-2">
                 <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[#D96F58]">
-                  <Sparkles className="w-3.5 h-3.5" /> FEATURED PROPERTY
+                  <Sparkles className="w-3.5 h-3.5" /> FEATURED SELECTION
                 </span>
-                <span className="text-xs font-mono font-bold text-[#0B2239] bg-[#F8F4EF] px-2 py-0.5 rounded">
+                <span
+                  className={`text-xs font-mono font-bold px-2 py-0.5 rounded ${
+                    isDark ? 'bg-white/10 text-amber-300' : 'bg-[#FAF7F2] text-[#0B2239]'
+                  }`}
+                >
                   12 Marla
                 </span>
               </div>
 
-              <h4 className="font-display font-bold text-base text-[#0B2239] leading-snug">
+              <h4 className="font-display font-bold text-base leading-snug">
                 Modern Family Residence
               </h4>
 
-              <p className="text-xs text-[#68717A] mt-0.5 mb-3">
-                Premium location • Spacious design
+              <p className={`text-xs mt-0.5 mb-3 ${isDark ? 'text-slate-300' : 'text-[#68717A]'}`}>
+                Available on Request • Chenab Nagar Enclave
               </p>
 
-              <div className="flex items-center justify-between pt-2 border-t border-[#EFE8DF]">
-                <span className="text-xs font-semibold text-[#202A33]">
-                  Chenab Nagar Sector
+              <div className={`flex items-center justify-between pt-2.5 border-t ${isDark ? 'border-white/10' : 'border-[#EFE8DF]'}`}>
+                <span className="text-xs font-semibold opacity-90">
+                  Sector 1
                 </span>
                 <button
                   id="hero-view-property-btn"
                   onClick={onSelectFeaturedProperty || scrollToProperties}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-[#D96F58] hover:text-[#0B2239] transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#D96F58] hover:underline cursor-pointer"
                 >
-                  <span>View Property</span>
+                  <span>View Details</span>
                   <span>&rarr;</span>
                 </button>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

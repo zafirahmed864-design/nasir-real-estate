@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
+import { RecentTransactionsTicker } from './components/RecentTransactionsTicker';
 import { Hero } from './components/Hero';
 import { TrustStrip } from './components/TrustStrip';
 import { DirectSalePurchaseCTA } from './components/DirectSalePurchaseCTA';
 import { FeaturedProperties } from './components/FeaturedProperties';
+import { PropertyEstimator } from './components/PropertyEstimator';
 import { Services } from './components/Services';
 import { WhyChooseUs } from './components/WhyChooseUs';
 import { AboutSection } from './components/AboutSection';
@@ -17,7 +20,8 @@ import { HostingerModal } from './components/HostingerModal';
 import { PROPERTIES } from './data/properties';
 import { Property } from './types';
 
-export default function App() {
+function AppContent() {
+  const { isDark } = useTheme();
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [isHostingerGuideOpen, setIsHostingerGuideOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('All Properties');
@@ -29,21 +33,28 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8F4EF] text-[#202A33] flex flex-col selection:bg-[#D96F58] selection:text-white">
-      {/* 1. Sticky Navigation Header */}
+    <div
+      className={`min-h-screen flex flex-col selection:bg-[#D96F58] selection:text-white transition-colors duration-300 ${
+        isDark ? 'bg-[#060B14] text-white' : 'bg-[#FAF7F2] text-[#202A33]'
+      }`}
+    >
+      {/* 1. Sticky Navigation Header with Theme Toggle */}
       <Navbar />
 
+      {/* 2. Live Market Activity Ticker */}
+      <RecentTransactionsTicker />
+
       <main className="flex-1">
-        {/* 2. Dramatic Hero Section */}
+        {/* 3. Dramatic Luxury Hero Section with Framer Motion */}
         <Hero onSelectFeaturedProperty={handleSelectFeaturedProperty} />
 
-        {/* 3. Trust & Core Introduction Strip */}
+        {/* 4. Trust & Core Introduction Strip */}
         <TrustStrip />
 
-        {/* 4. Direct Sale & Purchase Contact Section */}
+        {/* 5. Direct Sale & Purchase Contact Section (English CTAs & Direct Contact) */}
         <DirectSalePurchaseCTA />
 
-        {/* 5. Featured Properties Grid */}
+        {/* 6. Featured Properties Grid with Animated Filter Tabs */}
         <FeaturedProperties
           properties={PROPERTIES}
           activeCategory={activeCategory}
@@ -51,42 +62,53 @@ export default function App() {
           onSelectProperty={(prop) => setSelectedProperty(prop)}
         />
 
-        {/* 6. Services Section (What We Can Help You With) */}
+        {/* 7. Interactive Property Valuation & Budget Estimator */}
+        <PropertyEstimator />
+
+        {/* 8. Services Section (Editorial Numbered Bento Cards) */}
         <Services />
 
-        {/* 7. Why Choose Nasir Real Estate (Split Layout) */}
+        {/* 9. Why Choose Nasir Real Estate (Split Layout with High-Res Photography) */}
         <WhyChooseUs />
 
-        {/* 8. About Section (Verified Location, Chamber, Purpose) */}
+        {/* 10. About Section (Verified Location, Chamber, Purpose) */}
         <AboutSection />
 
-        {/* 9. How It Works (4-Step Timeline) */}
+        {/* 11. How It Works (4-Phase Pathway) */}
         <HowItWorks />
 
-        {/* 10. Strong Dark Navy WhatsApp CTA Banner */}
+        {/* 12. Strong Dark Navy WhatsApp CTA Banner */}
         <WhatsAppBanner />
 
-        {/* 11. Contact Section & Direct WhatsApp Form */}
+        {/* 13. Contact Section & Direct WhatsApp Form */}
         <ContactSection />
       </main>
 
-      {/* 13. Dark Navy Footer */}
+      {/* 14. Luxury Dark Footer */}
       <Footer onOpenHostingerGuide={() => setIsHostingerGuideOpen(true)} />
 
-      {/* 14. Fixed Floating WhatsApp Conversion Button */}
+      {/* 15. Fixed Floating WhatsApp Conversion Button */}
       <FloatingWhatsApp />
 
-      {/* 15. Property Details Modal */}
+      {/* 16. Property Details Modal with Gallery Lightbox */}
       <PropertyDetailModal
         property={selectedProperty}
         onClose={() => setSelectedProperty(null)}
       />
 
-      {/* 16. Hostinger Deployment Guide Modal */}
+      {/* 17. Hostinger & Netlify Deployment Guide Modal */}
       <HostingerModal
         isOpen={isHostingerGuideOpen}
         onClose={() => setIsHostingerGuideOpen(false)}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

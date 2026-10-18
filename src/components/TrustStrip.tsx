@@ -1,60 +1,84 @@
 import React from 'react';
 import { Search, Compass, MessageSquare, PhoneCall } from 'lucide-react';
+import { motion } from 'motion/react';
+import { useTheme } from '../context/ThemeContext';
 
 export const TrustStrip: React.FC = () => {
+  const { isDark } = useTheme();
+
   const points = [
     {
       id: 'trust-search',
       icon: Search,
       title: 'PROPERTY SEARCH',
-      desc: 'Explore opportunities that match your needs.'
+      desc: 'Explore verified residential houses, ready plots, and commercial opportunities.'
     },
     {
       id: 'trust-knowledge',
       icon: Compass,
-      title: 'LOCAL KNOWLEDGE',
-      desc: 'Focused understanding of the local property market.'
+      title: 'LOCAL GROUNDING',
+      desc: 'Direct market insight across Chenab Nagar, Chiniot, and connecting corridors.'
     },
     {
       id: 'trust-comm',
       icon: MessageSquare,
-      title: 'CLEAR COMMUNICATION',
-      desc: 'Simple and direct guidance throughout your property journey.'
+      title: 'CLEAR ADVISORY',
+      desc: 'Transparent guidance on documentation, pricing, and ownership verification.'
     },
     {
       id: 'trust-contact',
       icon: PhoneCall,
-      title: 'EASY CONTACT',
-      desc: 'Reach Nasir Real Estate directly by phone or WhatsApp.'
+      title: 'DIRECT CONTACT',
+      desc: 'Reach Nasir Real Estate directly via phone or WhatsApp with zero broker delay.'
     }
   ];
 
   return (
     <section id="trust-strip" className="relative z-10 -mt-6 sm:-mt-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg border border-[#EFE8DF] p-6 sm:p-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 divide-y sm:divide-y-0 sm:divide-x divide-[#EFE8DF]">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className={`rounded-2xl sm:rounded-3xl shadow-xl border p-6 sm:p-8 backdrop-blur-xl transition-colors ${
+          isDark
+            ? 'bg-[#0B1424]/90 border-white/10 text-white'
+            : 'bg-white border-[#EFE8DF] text-[#0B2239]'
+        }`}
+      >
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 divide-y sm:divide-y-0 sm:divide-x ${
+          isDark ? 'divide-white/10' : 'divide-[#EFE8DF]'
+        }`}>
           {points.map((pt, idx) => {
             const Icon = pt.icon;
             return (
-              <div
+              <motion.div
                 key={pt.id}
                 id={pt.id}
+                whileHover={{ y: -3 }}
+                transition={{ duration: 0.2 }}
                 className={`flex flex-col items-start ${idx !== 0 ? 'pt-5 sm:pt-0 sm:pl-6' : ''} group`}
               >
-                <div className="w-11 h-11 rounded-xl bg-[#F8F4EF] group-hover:bg-[#D96F58]/10 text-[#0B2239] group-hover:text-[#D96F58] flex items-center justify-center mb-3.5 transition-colors">
+                <div
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 ${
+                    isDark
+                      ? 'bg-white/5 group-hover:bg-[#D96F58]/20 text-[#D96F58] border border-white/5 group-hover:border-[#D96F58]/40'
+                      : 'bg-[#FAF7F2] group-hover:bg-[#D96F58]/10 text-[#0B2239] group-hover:text-[#D96F58]'
+                  }`}
+                >
                   <Icon className="w-5 h-5 stroke-[1.8]" />
                 </div>
-                <h3 className="font-display font-bold text-sm tracking-wider uppercase text-[#0B2239] mb-1.5">
+                <h3 className="font-display font-bold text-xs sm:text-sm tracking-wider uppercase mb-1.5">
                   {pt.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-[#68717A] leading-relaxed">
+                <p className={`text-xs sm:text-sm leading-relaxed ${isDark ? 'text-slate-300' : 'text-[#68717A]'}`}>
                   {pt.desc}
                 </p>
-              </div>
+              </motion.div>
             );
           })}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };
