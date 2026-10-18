@@ -1,0 +1,6 @@
+{
+  "name": "Nasir Real Estate",
+  "description": "Verified residential houses, ready possession plots, and prime commercial property in Chenab Nagar and Chiniot with professional advisory and direct owner negotiation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
